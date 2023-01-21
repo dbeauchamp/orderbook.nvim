@@ -14,9 +14,8 @@ M.price = function()
     completion = nil,
   }, function(symbol)
     if symbol then
-      local price = b.get_price(string.upper(symbol))
-      console.clear()
-      print(vim.inspect(price))
+      local output = b.get_price(string.upper(symbol))
+      print(output.data)
     else
       return
     end
