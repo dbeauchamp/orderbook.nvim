@@ -15,7 +15,7 @@ M.price = function()
   }, function(symbol)
     if symbol then
       local output = b.get_price(string.upper(symbol))
-      print(output.data)
+      print(" - " .. output)
     else
       return
     end

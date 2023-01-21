@@ -4,13 +4,13 @@ local M = {}
 
 local base_url = "https://api.binance.com/api/v3"
 
-M._format_pric_string = function(data)
+M._format_price_string = function(data)
   local price = tonumber(data.lastPrice)
   local change = tonumber(data.priceChangePercent)
   local chart = change < 0 and "📉" or "📈"
   local changetext = "% 24hr change"
-  local text = "%s %s %0.2f | %0.1f%s"
-  return string.format(text, chart, data.symbol, price, change, changetext)
+  local text = "%s $%0.2f | %s %0.1f%s"
+  return string.format(text,  data.symbol, price, chart, change, changetext)
 end
 
 M.get_price = function(symbol)
@@ -21,11 +21,15 @@ M.get_price = function(symbol)
     method="get"
   })
 
-  print(vim.inspect(res))
   local code = res.status
   local data = vim.fn.json_decode(res.body)
 
-  return {code=code, data=M._format_pric_string(data)}
+  if code == 200 then
+    return M._format_price_string(data)
+  else
+    return data.msg
+  end
+
 end
 
 return M
